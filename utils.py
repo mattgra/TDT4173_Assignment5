@@ -14,8 +14,11 @@ def conf_mat(predicted, expected, title = 'Confusion Matrix', return_matrix = Fa
       expected.reshape(len(expected), 1) 
 
       for pred, expe in zip(predicted, expected):
-            i = abc.find(str(pred[0]))
-            j = abc.find(str(expe[0]))
+            try:
+                  i = abc.find(str(pred[0]))
+                  j = abc.find(str(expe[0]))
+            except IndexError:
+                  i, j = int(pred), int(expe)
             confusion_matrix[j, i] += 1
 
       fig = plt.figure()
@@ -50,6 +53,54 @@ def conf_mat(predicted, expected, title = 'Confusion Matrix', return_matrix = Fa
             return confusion_matrix
       else:
             return 0
+
+
+def mean_and_std_plots(img_orig, img_preprocessed, prefix = 'Preprocessed'):
+
+      plt.figure()
+      means_orig = img_orig.mean(axis = 1)
+      stds_orig = img_orig.std(axis = 1)
+      means_preproc = img_preprocessed.mean(axis = 1)
+      stds_preproc = img_preprocessed.std(axis = 1)
+
+      plt.subplot(2,2,1)
+      plt.hist(means_orig, bins = 100)
+      plt.title('Original Mean Values')
+
+      plt.subplot(2,2,2)
+      plt.hist(stds_orig, bins = 100)
+      plt.title('Original Standard Deviations')
+
+      plt.subplot(2,2,3)
+      plt.hist(means_preproc, bins = 100)
+      plt.title(prefix + ' Mean Values')
+
+      plt.subplot(2,2,4)
+      plt.hist(stds_preproc, bins = 100)
+      plt.title(prefix + ' Standard Deviations')
+
+      plt.tight_layout()
+      plt.show()
+
+
+def plot_random_letters(images, labels, window_size = 4):
+
+      ABC = 'abcdefghijklmnopqrstuvwxyz'
+      N_IMAGES = len(images)
+      WINDOW_SIZE = window_size  # number of images per row/col
+      indices = np.random.randint(low = 0, high = N_IMAGES, size = WINDOW_SIZE*WINDOW_SIZE)
+      plt.figure()
+      plt.ion()
+      
+      for i, index in enumerate(indices):
+            plt.subplot(WINDOW_SIZE, WINDOW_SIZE, i+1)
+            plt.imshow(images[int(index)].reshape(20,20))
+            letter = ABC[int(labels[index])]
+            plt.title('Label: {}'.format(letter))
+      
+      plt.tight_layout()
+      plt.show()
+      return 0
 
 
 def main():
