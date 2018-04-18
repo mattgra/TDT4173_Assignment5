@@ -22,10 +22,11 @@ def load_images(flatten = True, test_size = 0.2):
         images = np.zeros(shape = (N_IMAGES, N_FEATURES))
     else:
         images = np.zeros(shape = (N_IMAGES, HEIGHT, WIDTH))
-    labels = np.zeros(shape = (N_IMAGES, 1)).astype(str)
+    labels = np.zeros(shape = (N_IMAGES))
     
     # load images and labels
     i = 0
+    letter_index = 0
     print('... loading images')
     for letter in tqdm('abcdefghijklmnopqrstuvwxyz'):
         for img_name in os.listdir(os.path.join(PATH,letter)):
@@ -34,8 +35,9 @@ def load_images(flatten = True, test_size = 0.2):
                 images[i] = np.array(skimage.io.imread(file_path)).flatten()
             else:
                 images[i] = np.asarray(skimage.io.imread(file_path))
-            labels[i] = letter
+            labels[i] = letter_index
             i += 1
+        letter_index += 1
 
     # split into training and test data
     train_img, test_img, train_label, test_label = train_test_split(images, labels, test_size = test_size, random_state = 0)
