@@ -63,6 +63,8 @@ THRESHOLD = 0.99
 boxes = predict_boxes(image=image, stepSize=STEPSIZE, windowSize=WINDOWSIZE)
 draw_boxes(boxes, threshold = 0.99)
 
+
+# TODO: this is not working yet. i think tf needs inputs in tensor format...
 import tensorflow as tf
 from tensorflow import image
 box_origins = [[x,y] for x,y,_ in boxes]
